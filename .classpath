@@ -6,23 +6,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="C:/Users/weare/eclipse-workspace/graph test/bin/collections-generic-4.01.jar"/>
-	<classpathentry kind="lib" path="C:/Users/weare/eclipse-workspace/graph test/bin/colt-1.2.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/weare/eclipse-workspace/graph test/bin/concurrent-1.3.4.jar"/>
-	<classpathentry kind="lib" path="C:/Users/weare/eclipse-workspace/graph test/bin/j3d-core-1.3.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/weare/eclipse-workspace/graph test/bin/jung-3d-2.0.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/weare/eclipse-workspace/graph test/bin/jung-3d-demos-2.0.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/weare/eclipse-workspace/graph test/bin/jung-algorithms-2.0.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/weare/eclipse-workspace/graph test/bin/jung-api-2.0.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/weare/eclipse-workspace/graph test/bin/jung-graph-impl-2.0.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/weare/eclipse-workspace/graph test/bin/jung-io-2.0.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/weare/eclipse-workspace/graph test/bin/jung-jai-2.0.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/weare/eclipse-workspace/graph test/bin/jung-jai-samples-2.0.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/weare/eclipse-workspace/graph test/bin/jung-samples-2.0.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/weare/eclipse-workspace/graph test/bin/jung-visualization-2.0.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/weare/eclipse-workspace/graph test/bin/stax-api-1.0.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/weare/eclipse-workspace/graph test/bin/vecmath-1.3.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/weare/eclipse-workspace/graph test/bin/wstx-asl-3.2.6.jar"/>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
