@@ -1,4 +1,4 @@
-package com.ist.rc;
+package test.java.com.ist.rc;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

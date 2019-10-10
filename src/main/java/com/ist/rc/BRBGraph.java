@@ -1,32 +1,19 @@
+package main.java.com.ist.rc;
+
 import java.awt.Dimension;
-import java.awt.RenderingHints;
-import java.awt.Stroke;
-import java.awt.geom.Point2D;
 import java.util.HashSet;
-import java.util.Random;
 import java.util.Set;
 
 import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 
 import org.apache.commons.collections15.Factory;
-import org.apache.commons.collections15.Predicate;
 
 import edu.uci.ics.jung.algorithms.generators.random.BarabasiAlbertGenerator;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
-import edu.uci.ics.jung.algorithms.layout.Layout;
-import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
-import edu.uci.ics.jung.graph.util.Context;
-import edu.uci.ics.jung.graph.util.Pair;
-import edu.uci.ics.jung.visualization.Layer;
-import edu.uci.ics.jung.visualization.RenderContext;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
-import edu.uci.ics.jung.visualization.decorators.EdgeShape;
-import edu.uci.ics.jung.visualization.renderers.BasicEdgeRenderer;
-import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 
 public class BRBGraph 
 {
@@ -41,7 +28,7 @@ public class BRBGraph
         JFrame f = new JFrame();
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        Set<Integer> seedVertices = new HashSet();
+        Set<Integer> seedVertices = new HashSet<Integer>();
     	for (int i = 0; i < 10; i++) {
     		seedVertices.add(i);
     	}

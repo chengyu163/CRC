@@ -1,3 +1,5 @@
+package main.java.com.ist.rc;
+
 import edu.uci.ics.jung.algorithms.generators.random.BarabasiAlbertGenerator;
 
 import java.util.HashSet;
@@ -14,7 +16,7 @@ public static void main(String[] args) {
 	
 
 
-	Set<Integer> seedVertices = new HashSet();
+	Set<Integer> seedVertices = new HashSet<Integer>();
 	for (int i = 0; i < 10; i++) {
 		seedVertices.add(i);
 	}

@@ -1,27 +1,24 @@
-package com.ist.rc;
-import edu.uci.ics.jung.graph.Graph;
+package main.java.com.ist.rc;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
-import edu.uci.ics.jung.algorithms.shortestpath.DistanceStatistics;
-import edu.uci.ics.jung.algorithms.metrics.Metrics;
+
+import edu.uci.ics.jung.graph.Graph;
 /*
 * Concentrate the main metrics (Jung has them dispersed 
 * and some not completely done.) in one class. As well, as
 * some other utility functions we might find convinient.
 *
 * Note: It is assumed who uses this class knows V and E classes
-* from graph g. 
+* from graph g. s
 */
 public class GraphAnalysis<V,E>{
 
-	Graph g;
+	Graph<Integer, Integer> g;
 	ArrayList<Integer> degreeDistribution = null;
 	double apl = -1;
 	Map<V,Double> clusteringCoefficients = null;
 	double averageDegree = -1;
-	public GraphAnalysis(Graph graph){
+	public GraphAnalysis(Graph<Integer, Integer> graph){
 		g = graph;
 	}
 
@@ -33,10 +30,10 @@ public class GraphAnalysis<V,E>{
     }
 
     /*Degree Distribution absolute format*/
-    public ArrayList degreeDistribution(){
+    public ArrayList<Integer> degreeDistribution(){
     	if(degreeDistribution == null){
-    		ArrayList list = new ArrayList(g.getVertices());
-    		ArrayList<Integer> degrees = new ArrayList(g.getVertexCount());
+    		ArrayList<Integer> list = new ArrayList<Integer>(g.getVertices());
+    		ArrayList<Integer> degrees = new ArrayList<Integer>(g.getVertexCount());
     		for( int i=0; i<degrees.size(); i++){ //Note:I don't like this for.
     			degrees.set(i,0);
     		}

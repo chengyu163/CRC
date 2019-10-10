@@ -1,4 +1,4 @@
-package com.ist.rc;
+package main.java.com.ist.rc;
 import edu.uci.ics.jung.graph.SparseMultigraph;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import edu.uci.ics.jung.graph.UndirectedGraph;
@@ -18,7 +18,7 @@ public class Main {
     public static void main( String[] args )
     {
     	System.out.println("it's working\n\n\n\n\n\n");
-    	Graph g = new UndirectedSparseGraph<Integer,Integer>();
+    	Graph<Integer, Integer> g = new UndirectedSparseGraph<Integer,Integer>();
     	Factory<UndirectedGraph<Integer,Integer>> g2 = new Factory<UndirectedGraph<Integer,Integer>>(){ 
     		public UndirectedSparseGraph<Integer,Integer>create(){ 
     			return new UndirectedSparseGraph<Integer,Integer>();
