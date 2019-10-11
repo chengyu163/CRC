@@ -1,7 +1,11 @@
 package main.java.com.ist.rc;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import javax.swing.JFrame;
@@ -28,7 +32,21 @@ public class BRBGraph
         JFrame f = new JFrame();
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        Set<Integer> seedVertices = new HashSet<Integer>();
+        Graph<Integer, Integer> graph = createBRBGraph();
+
+        Dimension size = new Dimension(800,800);
+        VisualizationViewer<Integer, Integer> vv = 
+            new VisualizationViewer<Integer, Integer>(
+                new FRLayout<Integer, Integer>(graph, size));
+
+        f.getContentPane().add(vv);
+        f.setSize(size);
+        f.setLocationRelativeTo(null);
+        f.setVisible(true);
+    }
+
+	private static Graph<Integer, Integer> createBRBGraph() {
+		Set<Integer> seedVertices = new HashSet<Integer>();
     	for (int i = 0; i < 10; i++) {
     		seedVertices.add(i);
     	}
@@ -53,21 +71,8 @@ public class BRBGraph
     	
     	Graph<Integer, Integer> graph =bag.create();
     	bag.evolveGraph(100);
-
-        Dimension size = new Dimension(800,800);
-        VisualizationViewer<Integer, Integer> vv = 
-            new VisualizationViewer<Integer, Integer>(
-                new FRLayout<Integer, Integer>(graph, size));
-        DefaultModalGraphMouse<Integer, Integer> graphMouse = 
-            new DefaultModalGraphMouse<Integer, Integer>();
-        vv.setGraphMouse(graphMouse); 
-
-
-        f.getContentPane().add(vv);
-        f.setSize(size);
-        f.setLocationRelativeTo(null);
-        f.setVisible(true);
-    }
+    	return graph;
+	}
 
 
 

@@ -1,5 +1,6 @@
 package main.java.com.ist.rc;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -30,15 +31,29 @@ public class GraphAnalysis<V,E>{
 	double averageClusteringCoefficient = 0;
 	double averageDegree = -1;
 	//averagePathLength
+	//
+	Map<Integer, MutableInt> mapNumNodeWithDegree = null;
 	public GraphAnalysis(Graph<Integer, Integer> graph){
 		g = graph;
 		degreeDistribution = degreeDistribution();
 		clusteringCoefficients = clusteringCoefficient();
 		averageClusteringCoefficient = averageClusteringCoefficient();
 		averageDegree = averageDegree();
+		mapNumNodeWithDegree = MappingNumNodeWithDegree();
 	}
 
-    private double averageDegree() {
+    private Map<Integer, MutableInt> MappingNumNodeWithDegree() {
+    	Map<Integer, MutableInt> map = new HashMap<Integer, MutableInt>();
+		for (Integer degree: degreeDistribution) {
+			if(map.containsKey(degree)) 
+				map.get(degree).increment();
+			 else
+				 map.put(degree, new MutableInt());
+		}
+		return map;
+	}
+
+	private double averageDegree() {
 		return degreeDistribution.stream()
 				.mapToInt(Integer::intValue).average().getAsDouble();
 	}
