@@ -5,15 +5,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
-import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.algorithms.metrics.Metrics;
 import edu.uci.ics.jung.algorithms.shortestpath.DistanceStatistics;
 import edu.uci.ics.jung.algorithms.shortestpath.UnweightedShortestPath;
 import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.util.Graphs;
 /*
 * Concentrate the main metrics (Jung has them dispersed 
 * and some not completely done.) in one class. As well, as
@@ -62,23 +58,12 @@ public class GraphAnalysis<V,E>{
     	if(averageDegree == -1)
     		averageDegree = 2*g.getEdgeCount()/g.getVertexCount();
     	return averageDegree;
-
     }
 
     /*Degree Distribution absolute format*/
     public List<Integer> degreeDistribution(){
-    	if(degreeDistribution == null){
-    		ArrayList<Integer> list = new ArrayList<Integer>(g.getVertices());
-    		ArrayList<Integer> degrees = new ArrayList<Integer>(g.getVertexCount());
-    		for( int i=0; i<degrees.size(); i++){ //Note:I don't like this for.
-    			degrees.set(i,0);
-    		}
-   			for(int i=0; i<list.size(); i++){
-   				int incDegree= degrees.get(i) + 1; 
-    			degrees.set(g.getNeighborCount(list.get(i)),incDegree);
-    		}
-    	}
-    	return degreeDistribution;
+    	return g.getVertices().stream().map(v -> g.getNeighborCount(v)).collect(Collectors.toList());
+    
     }
 
     /* NOTE: diameter should also be a cool thing to calculate */
@@ -90,13 +75,11 @@ public class GraphAnalysis<V,E>{
     }
 
     public Map<Integer, Double> clusteringCoefficient(){
-	/* use Metrics.clusteringCoefficients(g)? */
     	return Metrics.clusteringCoefficients(g);
-    	
     }
     
     public double averageClusteringCoefficient() {
-    	int count = 0;
+    	double count = 0;
     	for (Entry<Integer, Double> entry: clusteringCoefficients.entrySet()) {
 			count+=entry.getValue();
 		}
@@ -105,7 +88,7 @@ public class GraphAnalysis<V,E>{
 
     /*Suppose to put up a graphic or something about the degree distribution*/
     public static void plotDegreeDistribution(){
-    	return;
+    	return ;
     }
 
 }
