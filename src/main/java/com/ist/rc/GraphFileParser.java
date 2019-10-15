@@ -1,4 +1,5 @@
 package com.ist.rc;
+
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.Scanner;
@@ -6,8 +7,6 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.io.File;
 import java.io.FileNotFoundException;
-
-import edu.uci.ics.jung.graph.Graph;
 
 
 /*****************
@@ -37,17 +36,17 @@ import edu.uci.ics.jung.graph.Graph;
   *   Any information to ignore or extra is referred as "ignores" and is
   *   represented in the format as "I". ex. format = "[V]I[V]\n"
   *
-  *  Don't forget "I" and "V" are upper case. And, to add the "\n" if it's case of it!
+  *  Don't forget "I" and "V" are UPPER CASE!!. And, to add the "\n" if it's case of it!
   *
 ******************* */
 
 
 
-class GraphFileParser<G extends Graph>{
+class GraphFileParser<V,E,G>{
   final String V = "V"; //how format defines a vertex
   final String I = "I"; //how format defines something to ignore/extra
-  VertexFactory vFactory;
-  EdgeFactory eFactory;
+  VertexFactory<V,G> vFactory;
+  EdgeFactory<V,E,G> eFactory;
   G graph;
 
   /*
@@ -57,7 +56,7 @@ class GraphFileParser<G extends Graph>{
   *  _eFactory: factory that knows how to create and add edges to graph
   *
   */
-  public GraphFileParser(VertexFactory _vFactory, EdgeFactory _eFactory, G _graph){
+  public GraphFileParser(VertexFactory<V,G> _vFactory, EdgeFactory<V,E,G> _eFactory, G _graph){
     vFactory = _vFactory;
     eFactory = _eFactory;
     graph = _graph;
@@ -97,7 +96,7 @@ class GraphFileParser<G extends Graph>{
       String group = scan.findWithinHorizon(newRegex,0);
       while(group != null){
         ParserInfo info = splitIntoVertex(format,group,addIgnores); 
-        Vertex[] ve = vFactory.addVertex(graph,info);
+        V[] ve = vFactory.addVertex(graph,info);
         eFactory.addEdge(graph,info,ve);
         group = scan.findWithinHorizon(newRegex,0);
       }

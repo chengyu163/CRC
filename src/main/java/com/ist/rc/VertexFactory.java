@@ -1,13 +1,17 @@
 package com.ist.rc;
 
-import edu.uci.ics.jung.graph.Graph;
-
 /**
 *  VertexFactory interface.
 *
+*  You should define your concrete VertexFactory and 
+*  define the specific vertex class it will produce.
+* 
+*  This class is only supposed to need info from the parsing
+*  using GraphFileParser class and the graph instance.
+*   
+*  For a concrete example check GeneralVertexFactory
 */
 
-
 public interface VertexFactory<V,G>{
-	public Vertex[] addVertex(G graph, GraphFileParser.ParserInfo info);
+	public V[] addVertex(G graph, GraphFileParser.ParserInfo info);
 }

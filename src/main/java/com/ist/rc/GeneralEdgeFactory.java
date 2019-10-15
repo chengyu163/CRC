@@ -4,32 +4,43 @@ import java.util.HashMap;
 import edu.uci.ics.jung.graph.Graph;
 
 /**
-*	This EdgeFactory uses Class Edge.
-*	You need to specify the type of Vertex to add.
-*	The type of vertex to add must match the vertex type of the Graph
-* 
-*	This is a simple EdgeFactory that produces edges between two vertex
-*	The Edge produced is also as simple as it can be.
-*
-*	This factory also keeps the edges. This is useful since Jung
-*   has no  good mechanism to find edges. To do that, we'd have to ask
-*	for the whole list of edges and iterate over it.
-*
-*
-*  
+	*  Check EdgeFactory interface file before.
+	*
+	*  Specific EdgexFactory Interface implementation:
+	*    Edges are Edge class
+	*	 graph has to be subclass of Graph
+	*	 The edges are simple with 2 vertexes only
+	*	
+	*  You need to specify the type of Vertex to add when instantiating.
+	*  The type of vertex to add must match the vertex type of the Graph
+	* 
+	*  The Edge produced is also as simple as it can be.
+	*
+	*  IMPORTANT: the map is only supposed to be used when creating the graph. 
+	*  Using this map after the initial creation of the graph might end in 
+	*  incoherent results. 
+	*
+	*  The only reason it's used is because the JUNG Graph collection of edges
+	*  we can retrieve is too slow. But that's the one which should be used
+	*  with the graph after creating it.
+	*
+	*  If you want a graph with a faster data structure, we recommend creating another
+	*  subclass of Graph with the convinient structures and overriding the necessary methods.
+	*
+	*
 **/
 
-public class GeneralEdgeFactory<V extends Vertex,G extends Graph<V,Edge>> implements EdgeFactory<V,Edge,G>{
-	HashMap<VertexGroup,Edge> map = new HashMap(); //Note: it can't be treemap without compare. 
+public class GeneralEdgeFactory<V ,G extends Graph<V,Edge>> implements EdgeFactory<V,Edge,G>{
+	HashMap<VertexGroup,Edge> map = new HashMap<VertexGroup,Edge>(); 
 
 	public void addEdge(G graph, GraphFileParser.ParserInfo info, V[] vertexes){
 		Edge edge = new Edge();
 		if(graph.addEdge(edge,vertexes[0],vertexes[1])){
-			map.put(new VertexGroup(vertexes[0],vertexes[1]),edge);		
+			map.put(new VertexGroup<V>(vertexes[0],vertexes[1]),edge);		
 		}
 	}
 
-	class VertexGroup<V>{
+	class VertexGroup<V>{ //this is specific of this class. Just a way to organize the map
 		public V v1;
 		public V v2;
 		public VertexGroup(V _v1, V _v2){
