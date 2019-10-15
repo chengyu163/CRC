@@ -1,0 +1,19 @@
+package com.ist.rc;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
+import java.util.Map;
+import java.util.HashMap;
+/**
+*  A general vertex class.  
+*
+*  Only information it holds is its name, which also identifies it.
+*
+*  Use VertexFactory to keep consistency between Vertex instances
+*
+*/
+public class QuickUndirectedSparseGraph<V extends Vertex,E> extends UndirectedSparseGraph<V,E>{
+	Map<String,V> vertex = new HashMap<V>();
+	//definir addings andshit.
+	
+
+}
