@@ -1,4 +1,4 @@
-package com.ist.rc;
+package main.java.com.ist.rc;
 
 /**
 *  A general vertex class. As simple as it can be.

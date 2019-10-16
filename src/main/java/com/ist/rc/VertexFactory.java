@@ -1,4 +1,4 @@
-package com.ist.rc;
+package main.java.com.ist.rc;
 
 /**
 *  VertexFactory interface.

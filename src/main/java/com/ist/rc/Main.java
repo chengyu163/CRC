@@ -1,4 +1,4 @@
-package com.ist.rc;
+package main.java.com.ist.rc;
 import edu.uci.ics.jung.graph.SparseMultigraph;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import edu.uci.ics.jung.graph.UndirectedGraph;

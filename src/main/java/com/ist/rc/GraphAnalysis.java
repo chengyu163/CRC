@@ -31,6 +31,11 @@ public class GraphAnalysis<V,E>{
 	Map<Integer, MutableInt> mapNumNodeWithDegree = null;
 	public GraphAnalysis(Graph<Integer, Integer> graph){
 		g = graph;
+		degreeDistribution = degreeDistribution();
+		clusteringCoefficients = clusteringCoefficient();
+		averageClusteringCoefficient = averageClusteringCoefficient();
+		averageDegree = averageDegree();
+		mapNumNodeWithDegree = MappingNumNodeWithDegree();
 	}
 
     public Graph<Integer, Integer> getG() {
@@ -96,9 +101,9 @@ public class GraphAnalysis<V,E>{
 		return map;
 	}
 
-/*	private double averageDegree() {
+    private double averageDegree() {
 		return degreeDistribution.stream().mapToInt(Integer::intValue).average().getAsDouble();
-	}*/
+	}
 
 	public double getAverageDegree(){
     	if(averageDegree == -1)
@@ -132,10 +137,6 @@ public class GraphAnalysis<V,E>{
 		}
 		return count/clusteringCoefficients.size(); 
     }
-
-    /*Suppose to put up a graphic or something about the degree distribution*/
-    public static void plotDegreeDistribution(){
-    	return ;
-    }
+    
 
 }

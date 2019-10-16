@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.text.DecimalFormat;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -22,8 +23,10 @@ import org.apache.commons.collections15.Factory;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.LogAxis;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.NumberTickUnit;
+import org.jfree.chart.axis.TickUnits;
 import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
@@ -151,7 +154,7 @@ public class BRBGraph extends JFrame {
 		GraphAnalysis<Integer, Integer> graphAnalysis = new GraphAnalysis<Integer, Integer>(graph);
 		Map<Integer, MutableInt> degreeDistribution = graphAnalysis.getMapNumNodeWithDegree();
 		for (Entry<Integer, MutableInt> degree : degreeDistribution.entrySet()) {
-			series.add(degree.getValue().get(), degree.getKey().intValue());
+			series.add(degree.getKey().intValue(), (double)degree.getValue().get()/graph.getEdgeCount());
 		}
         XYSeriesCollection dataset = new XYSeriesCollection();
         dataset.addSeries(series);
@@ -173,7 +176,10 @@ public class BRBGraph extends JFrame {
         );
 
         XYPlot plot = chart.getXYPlot();
-      
+        LogAxis yAxis = new LogAxis("Y");
+        plot.setRangeAxis(yAxis);
+        LogAxis xAxis = new LogAxis("X");
+        plot.setDomainAxis(xAxis);
 
         XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) plot.getRenderer();
         renderer.setBaseShapesVisible(true);
