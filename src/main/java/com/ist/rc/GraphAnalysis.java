@@ -38,7 +38,59 @@ public class GraphAnalysis<V,E>{
 		mapNumNodeWithDegree = MappingNumNodeWithDegree();
 	}
 
-    private Map<Integer, MutableInt> MappingNumNodeWithDegree() {
+    public Graph<Integer, Integer> getG() {
+		return g;
+	}
+
+	public void setG(Graph<Integer, Integer> g) {
+		this.g = g;
+	}
+
+	public List<Integer> getDegreeDistribution() {
+		return degreeDistribution;
+	}
+
+	public void setDegreeDistribution(List<Integer> degreeDistribution) {
+		this.degreeDistribution = degreeDistribution;
+	}
+
+	public double getApl() {
+		return apl;
+	}
+
+	public void setApl(double apl) {
+		this.apl = apl;
+	}
+
+	public Map<Integer, Double> getClusteringCoefficients() {
+		return clusteringCoefficients;
+	}
+
+	public void setClusteringCoefficients(Map<Integer, Double> clusteringCoefficients) {
+		this.clusteringCoefficients = clusteringCoefficients;
+	}
+
+	public double getAverageClusteringCoefficient() {
+		return averageClusteringCoefficient;
+	}
+
+	public void setAverageClusteringCoefficient(double averageClusteringCoefficient) {
+		this.averageClusteringCoefficient = averageClusteringCoefficient;
+	}
+
+	public Map<Integer, MutableInt> getMapNumNodeWithDegree() {
+		return mapNumNodeWithDegree;
+	}
+
+	public void setMapNumNodeWithDegree(Map<Integer, MutableInt> mapNumNodeWithDegree) {
+		this.mapNumNodeWithDegree = mapNumNodeWithDegree;
+	}
+
+	public void setAverageDegree(double averageDegree) {
+		this.averageDegree = averageDegree;
+	}
+
+	private Map<Integer, MutableInt> MappingNumNodeWithDegree() {
     	Map<Integer, MutableInt> map = new HashMap<Integer, MutableInt>();
 		for (Integer degree: degreeDistribution) {
 			if(map.containsKey(degree)) 
