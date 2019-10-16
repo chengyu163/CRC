@@ -1,4 +1,4 @@
-package main.java.com.ist.rc;
+package com.ist.rc;
 import edu.uci.ics.jung.graph.SparseMultigraph;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import edu.uci.ics.jung.graph.UndirectedGraph;
@@ -8,6 +8,8 @@ import org.apache.commons.collections15.Factory;
 import edu.uci.ics.jung.algorithms.generators.random.*;
 import java.lang.Class;
 import java.lang.reflect.Constructor;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 //import com.google.common.base.Supplier; //Jung uses common base and not java util
 /*
 * DON'T MIND THIS FILE. 
@@ -17,26 +19,38 @@ import java.lang.reflect.Constructor;
 public class Main {
     public static void main( String[] args )
     {
-    	System.out.println("it's working\n\n\n\n\n\n");
-    	Graph<Integer, Integer> g = new UndirectedSparseGraph<Integer,Integer>();
-    	Factory<UndirectedGraph<Integer,Integer>> g2 = new Factory<UndirectedGraph<Integer,Integer>>(){ 
-    		public UndirectedSparseGraph<Integer,Integer>create(){ 
-    			return new UndirectedSparseGraph<Integer,Integer>();
-    		}
-    	};
-    	
-        Factory<Integer> k = new Factory<Integer>() {
-    		int count;
-    		@Override
-    		public Integer create() {
-    			return count++;
-    		}
-    	};
 
-    	ErdosRenyiGenerator<Integer,Integer> ergenertor= new ErdosRenyiGenerator<Integer,Integer>(g2,
-    		k,k,10,0.5);
- 
+    	System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n");
+     
+
+   
+
+
+
+        EdgeFactory gef = new GeneralEdgeFactory<Vertex,UndirectedGraph<Vertex,Edge>>();
+        VertexFactory gvf = new GeneralVertexFactory<UndirectedSparseGraph<Vertex,Edge>>();
+
+
+        UndirectedSparseGraph g = new UndirectedSparseGraph<Vertex,Edge>();
+        GraphFileParser<Vertex,Edge,UndirectedSparseGraph> gfp = new GraphFileParser<Vertex,Edge,UndirectedSparseGraph>
+        (gvf,
+        gef,
+         g);
+
+/*
+        UndirectedSparseGraph g = new UndirectedSparseGraph<Vertex,Edge>();
+        GraphFileParser<Vertex,Edge,UndirectedSparseGraph> gfp = new GraphFileParser<Vertex,Edge,UndirectedSparseGraph>
+        (new GeneralVertexFactory<UndirectedSparseGraph<Vertex,Edge>>(),
+         new GeneralEdgeFactory<Vertex,UndirectedSparseGraph<Vertex,Edge>>(), 
+         g);
+*/
+        String format = "  edge\n  [\n    source V\n    target V\n    value I\n  ]\n";
+
+
+        gfp.createGraph(format,"lesmis.gml",false);
+        System.out.println(g.getVertexCount());
+        System.out.println(g.getEdgeCount());
+        System.out.println("£££££££32££££££££\n"+g.toString());
     }
-}
-
+}    
 

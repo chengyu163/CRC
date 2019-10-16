@@ -31,11 +31,6 @@ public class GraphAnalysis<V,E>{
 	Map<Integer, MutableInt> mapNumNodeWithDegree = null;
 	public GraphAnalysis(Graph<Integer, Integer> graph){
 		g = graph;
-		degreeDistribution = degreeDistribution();
-		clusteringCoefficients = clusteringCoefficient();
-		averageClusteringCoefficient = averageClusteringCoefficient();
-		averageDegree = averageDegree();
-		mapNumNodeWithDegree = MappingNumNodeWithDegree();
 	}
 
     public Graph<Integer, Integer> getG() {
@@ -101,10 +96,9 @@ public class GraphAnalysis<V,E>{
 		return map;
 	}
 
-	private double averageDegree() {
-		return degreeDistribution.stream()
-				.mapToInt(Integer::intValue).average().getAsDouble();
-	}
+/*	private double averageDegree() {
+		return degreeDistribution.stream().mapToInt(Integer::intValue).average().getAsDouble();
+	}*/
 
 	public double getAverageDegree(){
     	if(averageDegree == -1)
@@ -121,7 +115,8 @@ public class GraphAnalysis<V,E>{
     /* NOTE: diameter should also be a cool thing to calculate */
     public Map<Integer, Integer> averagePathLength(){
     /*	use DistanceStatistics.averageDistances(g)? */
-    	Map<Integer, Integer> distances = (Map<Integer, Integer>) DistanceStatistics.averageDistances(g, new UnweightedShortestPath<Integer, Integer>(g));
+    	Map<Integer, Integer> distances = 
+        (Map<Integer, Integer>) DistanceStatistics.averageDistances(g, new UnweightedShortestPath<Integer, Integer>(g));
     	//dunno if it s corret, gonna study more and do it later
     	return distances;
     }

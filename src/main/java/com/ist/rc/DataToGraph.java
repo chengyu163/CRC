@@ -17,6 +17,6 @@ public class DataToGraph {
 	private Graph<Integer, Integer> DataToGraph(File file) {
 		List<Integer> listVertex = new ArrayList<Integer>();
 		List<Integer> listEdge = new ArrayList<Integer>();
-		
+		return null; //TO added this so it would compile
 	}
 }
