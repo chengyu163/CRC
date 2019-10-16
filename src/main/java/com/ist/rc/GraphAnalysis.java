@@ -4,9 +4,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.apache.commons.collections15.Transformer;
+import org.omg.PortableInterceptor.TRANSPORT_RETRY;
 
 import edu.uci.ics.jung.algorithms.metrics.Metrics;
+import edu.uci.ics.jung.algorithms.shortestpath.Distance;
 import edu.uci.ics.jung.algorithms.shortestpath.DistanceStatistics;
 import edu.uci.ics.jung.algorithms.shortestpath.UnweightedShortestPath;
 import edu.uci.ics.jung.graph.Graph;
@@ -26,9 +32,9 @@ public class GraphAnalysis<V,E>{
 	Map<Integer,Double> clusteringCoefficients = null;
 	double averageClusteringCoefficient = 0;
 	double averageDegree = -1;
-	//averagePathLength
-	//
+	double averagePathLength = 0;
 	Map<Integer, MutableInt> mapNumNodeWithDegree = null;
+	List<Map<Integer, Number>> listOfShortesPathOfEachVertex = null;
 	public GraphAnalysis(Graph<Integer, Integer> graph){
 		g = graph;
 		degreeDistribution = degreeDistribution();
@@ -36,9 +42,11 @@ public class GraphAnalysis<V,E>{
 		averageClusteringCoefficient = averageClusteringCoefficient();
 		averageDegree = averageDegree();
 		mapNumNodeWithDegree = MappingNumNodeWithDegree();
+		listOfShortesPathOfEachVertex = listOfShortesPathOfEachVertex();
+		averagePathLength = averagePathLength();
 	}
 
-    public Graph<Integer, Integer> getG() {
+	public Graph<Integer, Integer> getG() {
 		return g;
 	}
 
@@ -114,17 +122,25 @@ public class GraphAnalysis<V,E>{
     /*Degree Distribution absolute format*/
     public List<Integer> degreeDistribution(){
     	return g.getVertices().stream().map(v -> g.getNeighborCount(v)).collect(Collectors.toList());
-    
     }
 
-    /* NOTE: diameter should also be a cool thing to calculate */
-    public Map<Integer, Integer> averagePathLength(){
-    /*	use DistanceStatistics.averageDistances(g)? */
-    	Map<Integer, Integer> distances = 
-        (Map<Integer, Integer>) DistanceStatistics.averageDistances(g, new UnweightedShortestPath<Integer, Integer>(g));
-    	//dunno if it s corret, gonna study more and do it later
-    	return distances;
+    public List<Map<Integer, Number>> listOfShortesPathOfEachVertex(){
+    	UnweightedShortestPath<Integer, Integer> f = new UnweightedShortestPath<Integer, Integer>(g);
+    	List<Map<Integer, Number>> listOfShortesPathOfEachVertex = new ArrayList<>();
+    	for (Integer vertex: g.getVertices()) {
+			listOfShortesPathOfEachVertex.add(f.getDistanceMap(vertex.intValue()));
+		}
+    	return listOfShortesPathOfEachVertex;
     }
+    
+    private double averagePathLength() {
+    	double  totalLength =0;
+    	for (Map<Integer, Number> shortestPathLength : listOfShortesPathOfEachVertex) {
+			totalLength += shortestPathLength.values().stream().mapToDouble(value-> value.doubleValue()).sum();
+		}
+    	return totalLength/(g.getVertexCount()*(g.getVertexCount()-1));
+  	}
+
 
     public Map<Integer, Double> clusteringCoefficient(){
     	return Metrics.clusteringCoefficients(g);

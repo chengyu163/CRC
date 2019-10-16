@@ -98,7 +98,6 @@ public class BRBGraph extends JFrame {
         );
 
         XYPlot plot = chart.getXYPlot();
-      
 
         XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) plot.getRenderer();
         renderer.setBaseShapesVisible(true);
@@ -176,9 +175,9 @@ public class BRBGraph extends JFrame {
         );
 
         XYPlot plot = chart.getXYPlot();
-        LogAxis yAxis = new LogAxis("Y");
+        LogAxis yAxis = new LogAxis("P(X)");
         plot.setRangeAxis(yAxis);
-        LogAxis xAxis = new LogAxis("X");
+        LogAxis xAxis = new LogAxis("Degree");
         plot.setDomainAxis(xAxis);
 
         XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) plot.getRenderer();
@@ -220,7 +219,8 @@ public class BRBGraph extends JFrame {
 	private Component showStatistics(Graph<Integer, Integer> graph) {
 		GraphAnalysis<Integer, Integer> graphAnalysis = new GraphAnalysis<Integer, Integer>(graph);
 		String label = "<html>AverageDegree ="+graphAnalysis.averageDegree+
-				"<br/> AverageClusteringCoefficient ="+ graphAnalysis.averageClusteringCoefficient+"</html>";
+				"<br/> AverageClusteringCoefficient ="+ graphAnalysis.averageClusteringCoefficient+"<br/>"
+						+ "AveragePathLength ="+graphAnalysis.averagePathLength+"</html>";
 		JLabel metrics = new JLabel(label);
 		return metrics;
 	}
@@ -252,9 +252,9 @@ public class BRBGraph extends JFrame {
 
 		Factory<Graph<Integer, Integer>> graphFactory = SparseGraph.getFactory();
 		BarabasiAlbertGenerator<Integer, Integer> bag = new BarabasiAlbertGenerator<Integer, Integer>(graphFactory,
-				vertexFactory, edgeFactory, 4, 4, 0, seedVertices);
+				vertexFactory, edgeFactory, 5, 5, 0, seedVertices);
 		Graph<Integer, Integer> graph = bag.create();
-		bag.evolveGraph(1000);
+		bag.evolveGraph(300);
 		return graph;
 	}
 
