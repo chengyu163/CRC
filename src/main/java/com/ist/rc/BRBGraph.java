@@ -7,14 +7,12 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.text.DecimalFormat;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
-import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -24,9 +22,6 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.LogAxis;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.axis.NumberTickUnit;
-import org.jfree.chart.axis.TickUnits;
 import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
@@ -44,14 +39,15 @@ import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 
 public class BRBGraph extends JFrame {
-	private JPanel mainPanel;
-	private JPanel graphPanel;
-	private JPanel plotGraphicPanel;
-	private JPanel statisticPanel;
 
-	public BRBGraph() {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public BRBGraph(String[] args) {
 		
-		Graph<Integer, Integer> graph = createBRBGraph();
+		Graph<Integer, Integer> graph = createBRBGraph(args);
 
 		    JPanel panel = new JPanel(new GridLayout(2,2));
 	        JPanel scrollPane1 = new JPanel();
@@ -225,7 +221,7 @@ public class BRBGraph extends JFrame {
 		return metrics;
 	}
 
-	private static Graph<Integer, Integer> createBRBGraph() {
+	private static Graph<Integer, Integer> createBRBGraph(String[] args) {
 		Set<Integer> seedVertices = new HashSet<Integer>();
 		for (int i = 0; i < 10; i++) {
 			seedVertices.add(i);
@@ -254,7 +250,10 @@ public class BRBGraph extends JFrame {
 		BarabasiAlbertGenerator<Integer, Integer> bag = new BarabasiAlbertGenerator<Integer, Integer>(graphFactory,
 				vertexFactory, edgeFactory, 5, 5, 0, seedVertices);
 		Graph<Integer, Integer> graph = bag.create();
-		bag.evolveGraph(300);
+		if(args.length != 0)
+			bag.evolveGraph(Integer.parseInt(args[0]));
+		else
+			bag.evolveGraph(300);
 		return graph;
 	}
 
@@ -262,7 +261,7 @@ public class BRBGraph extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				new BRBGraph().setVisible(true);
+				new BRBGraph(args).setVisible(true);
 			}
 		});
 	}
