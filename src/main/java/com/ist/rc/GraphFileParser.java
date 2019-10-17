@@ -102,55 +102,34 @@ class GraphFileParser<V,E,G>{
     *
     * btw, you can't use this method directly, there's others that overload this
   */
-  private void createGraph(boolean isItEdge,String format, String fileName, Boolean addIgnores, boolean readWholeFile,int[] interval){
+  private void createGraph(String format, String fileName, Boolean addIgnores, boolean readWholeFile,int[] interval){
 
-    String newRegex = Pattern.quote(format);
-    int numOfNewLines = 0;
+    String newRegex = formatToRegex(format); //regex to capture segments
+    int numOfNewLines = getNumberOfNewLines(format); 
     int segmentsToRead = -1;
-
-    //if we're supposed to only read some lines of the file, we should count how many lines describe a vertex or edge
-    if(readWholeFile == false){
-      for(int i=0; i<format.length(); i++){
-        if(format.charAt(i)=='\n'){
-          numOfNewLines ++;
-        }
-      }
-    }
-
-    //if vertexes and edges are defined in only one line, it makes no sense to split the files into lines
-    if(numOfNewLines == 0){ 
-      readWholeFile = true;
-    }
-    //newRegex will capture the segments in fileName which describe the edges/vertexes
-    newRegex = newRegex.replaceAll("(?<!\\\\)"+V,"\\\\E[0-9a-zA-Z]*\\\\Q");
-    newRegex = newRegex.replaceAll("(?<=\\\\)"+V,V);
-    newRegex = newRegex.replaceAll("(?<!\\\\)"+I,"\\\\E.*\\\\Q");
+    int numOfVertexes = getNumberOfVertexes(format);
+    if(numOfNewLines == 0){readWholeFile = true;} //if vertexes and edges are defined in only one line, it makes no sense to split the files into lines
     File fp = new File(fileName);
+    
     try{
       Scanner scan = new Scanner(fp);
-
       if(readWholeFile == false){
         int i = 0;
-        while(scan.hasNextLine() && i<interval[0]){
+        while(scan.hasNextLine() && i<interval[0]){  //where in the file do we start to read?
           scan.nextLine();
           i++;
         }
-        //how many vertexes or edges are we suppose to read?
-        segmentsToRead = (interval[1]-interval[0])/numOfNewLines;
+        segmentsToRead = (interval[1]-interval[0])/numOfNewLines; //how many segments are we suppose to read?
       }
-
-
       String group = scan.findWithinHorizon(newRegex,0);
-      while(group != null && segmentsToRead != 0){
-          System.out.println(" ." + segmentsToRead);
-          ParserInfo info = splitIntoVertex(format,group,addIgnores,1); 
-
-          //Factories
-          V[] ve = vFactory.addVertex(graph,info);
-          if(isItEdge){
-            eFactory.addEdge(graph,info,ve);
+      //this matches segment to segment until we've either read all in the file or read all interval allowed
+      System.out.println("CreateGraph "+ newRegex);
+      while(group != null && segmentsToRead != 0){  
+          ParserInfo info = splitIntoVertex(format,group,addIgnores,numOfVertexes); 
+          V[] ve = vFactory.addVertex(graph,info); //factories!!
+          if(numOfVertexes > 1){ //is segment an edge?
+            eFactory.addEdge(graph,info,ve); //if it is: here's the edgeFactory
           }
-
           group = scan.findWithinHorizon(newRegex,0);
           segmentsToRead--;
 
@@ -164,22 +143,22 @@ class GraphFileParser<V,E,G>{
   }
 
   /* create graph that reads the whole file, doesn't care about ignores */
-	public void createGraph(boolean isItEdge,String format, String fileName){
-  	createGraph(isItEdge,format, fileName, false, true, null);
+	public void createGraph(String format, String fileName){
+  	createGraph(format, fileName, false, true, null);
   }
 
   /*create graph that read the whole file, but you can choose if you want to store the ignores*/
-  public void createGraph(boolean isItEdge,String format, String fileName, boolean addIgnores){
-    createGraph(isItEdge,format, fileName, addIgnores,true,null);
+  public void createGraph(String format, String fileName, boolean addIgnores){
+    createGraph(format, fileName, addIgnores,true,null);
   }
 
   /*create graph that reads file from line "beginning" to line "end", lines start at 0, includes beginning but doesn't include 
   the line "end" - its expected to read (end-beginning) lines. You can also decide if you want to store the ignores*/
-  public void createGraph(boolean isItEdge,String format, String fileName, boolean addIgnores, int beginning, int end){
+  public void createGraph(String format, String fileName, boolean addIgnores, int beginning, int end){
     int[] interval = new int[2];
     interval[0]=beginning;
     interval[1]=end;
-    createGraph(isItEdge,format,fileName,addIgnores,false,interval);
+    createGraph(format,fileName,addIgnores,false,interval);
   }
 
 
@@ -203,7 +182,6 @@ class GraphFileParser<V,E,G>{
   public ParserInfo splitIntoVertex(String format, String phrase,boolean addIgnores, int vertexesToRead){
     format = "|"+ format + "|";  //the algorithms knows when to stop by looking ahead and behind 
     phrase = "|"+ phrase + "|";  //this is to always have something to look ahead and behind
-
     int phraseIndex = 0;  
     int formatIndex = 0; 
     int vertexNumber = 0;
@@ -298,6 +276,38 @@ class GraphFileParser<V,E,G>{
         }
         return v.toString();
       }
+  }
+
+
+
+  private int getNumberOfVertexes(String format){
+      //Some relevant information about the format
+    int numOfVertexes = 0;
+    format = "|" + format + "|";    
+    for(int i=1; i<format.length(); i++){
+      if(format.charAt(i)==V.charAt(0) && format.charAt(i-1)!='\\' ){
+        numOfVertexes++;
+      }
+    }
+    return numOfVertexes; 
+  }
+
+  private int getNumberOfNewLines(String format){
+    int numOfNewLines = 0;
+    for(int i=0; i<format.length(); i++){
+      if(format.charAt(i)=='\n'){
+        numOfNewLines++;
+      }
+    }
+    return numOfNewLines;
+  }
+
+  private String formatToRegex(String format){
+    String newRegex = Pattern.quote(format);
+    newRegex = newRegex.replaceAll("(?<!\\\\)"+V,"\\\\E[0-9a-zA-Z ]*\\\\Q");
+    newRegex = newRegex.replaceAll("(?<=\\\\)"+V,V);
+    newRegex = newRegex.replaceAll("(?<!\\\\)"+I,"\\\\E.*\\\\Q");
+    return newRegex;
   }
 }
 

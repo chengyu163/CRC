@@ -42,10 +42,10 @@ public class Main {
          new GeneralEdgeFactory<Vertex,UndirectedSparseGraph<Vertex,Edge>>(), 
          g);
 */
-        String format = "[V]\n";
+        String format = "V V\n";
 
 
-        gfp.createGraph(false,format,"gset.txt",false);
+        gfp.createGraph(format,"keppo.txt",false);
         System.out.println(g.getVertexCount());
         System.out.println(g.getEdgeCount());
         System.out.println("£££££££32££££££££\n"+g.toString());
