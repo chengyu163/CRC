@@ -5,4 +5,8 @@ package main.java.com.ist.rc;
 **/
 
 public class Edge{
+
+	public String toString(){
+		return "Edge:";
+	}
 }

@@ -29,8 +29,6 @@ public class Main {
 
         EdgeFactory gef = new GeneralEdgeFactory<Vertex,UndirectedGraph<Vertex,Edge>>();
         VertexFactory gvf = new GeneralVertexFactory<UndirectedSparseGraph<Vertex,Edge>>();
-
-
         UndirectedSparseGraph g = new UndirectedSparseGraph<Vertex,Edge>();
         GraphFileParser<Vertex,Edge,UndirectedSparseGraph> gfp = new GraphFileParser<Vertex,Edge,UndirectedSparseGraph>
         (gvf,
@@ -44,10 +42,10 @@ public class Main {
          new GeneralEdgeFactory<Vertex,UndirectedSparseGraph<Vertex,Edge>>(), 
          g);
 */
-        String format = "  edge\n  [\n    source V\n    target V\n    value I\n  ]\n";
+        String format = "[V V]\n";
 
 
-        gfp.createGraph(format,"lesmis.gml",false);
+        gfp.createGraph(format,"gset.txt",false,2,4);
         System.out.println(g.getVertexCount());
         System.out.println(g.getEdgeCount());
         System.out.println("£££££££32££££££££\n"+g.toString());

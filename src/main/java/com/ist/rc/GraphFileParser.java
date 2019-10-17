@@ -7,7 +7,10 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.io.File;
 import java.io.FileNotFoundException;
-
+/*** 
+*  Terminology
+*     Ignores: information either to ignore or to store in the file for some reason of interest to the user
+*     Segments: either and edge or vertex - things to add to graph - described by format in creategraph signature
 
 /*****************
   * Use createGraph to add vertexes and edges to graph passed as argument
@@ -79,40 +82,84 @@ class GraphFileParser<V,E,G>{
     *  information to create the vertexes and edges will be returned.
     *  It will then call the factories that will know how to use this information in order to
     *  complete the graph passed in the constructor of this class.
+    *
+    * btw, you can't use this method directly, there's others that overload this
   */
-  public void createGraph(String format, String fileName, Boolean addIgnores, int linesToDelete){
-
+  private void createGraph(String format, String fileName, Boolean addIgnores, boolean readWholeFile,int[] interval){
     String newRegex = Pattern.quote(format);
-    //newRegex will capture the segments in fileName which describe the edges
+    int numOfNewLines = 0;
+    int segmentsToRead = -1;
+
+    //if we're supposed to only read some lines of the file, we should count how many lines describe a vertex or edge
+    if(readWholeFile == false){
+      for(int i=0; i<format.length(); i++){
+        if(format.charAt(i)=='\n'){
+          numOfNewLines ++;
+        }
+      }
+    }
+
+    //if vertexes and edges are defined in only one line, it makes no sense to split the files into lines
+    if(numOfNewLines == 0){ 
+      readWholeFile = true;
+    }
+    //newRegex will capture the segments in fileName which describe the edges/vertexes
     newRegex = newRegex.replaceAll("(?<!\\\\)"+V,"\\\\E[0-9a-zA-Z]*\\\\Q");
     newRegex = newRegex.replaceAll("(?<=\\\\)"+V,V);
     newRegex = newRegex.replaceAll("(?<!\\\\)"+I,"\\\\E.*\\\\Q");
     File fp = new File(fileName);
     try{
       Scanner scan = new Scanner(fp);
-      for(int i=0; i<linesToDelete; i++){
-        scan.nextLine();
+
+      if(readWholeFile == false){
+        int i = 0;
+        while(scan.hasNextLine() && i<interval[0]){
+          scan.nextLine();
+          i++;
+        }
+        //how many vertexes or edges are we suppose to read?
+        segmentsToRead = (interval[1]-interval[0])/numOfNewLines;
       }
+
+
       String group = scan.findWithinHorizon(newRegex,0);
-      while(group != null){
-        ParserInfo info = splitIntoVertex(format,group,addIgnores); 
-        V[] ve = vFactory.addVertex(graph,info);
-        eFactory.addEdge(graph,info,ve);
-        group = scan.findWithinHorizon(newRegex,0);
+      while(group != null && segmentsToRead != 0){
+          System.out.println(" ." + segmentsToRead);
+          ParserInfo info = splitIntoVertex(format,group,addIgnores); 
+          
+          //Factories
+          V[] ve = vFactory.addVertex(graph,info);
+          eFactory.addEdge(graph,info,ve);
+
+          group = scan.findWithinHorizon(newRegex,0);
+          segmentsToRead--;
+
       }
       scan.close();
-    } catch(FileNotFoundException e){
+    }
+    catch(FileNotFoundException e){
       System.out.println(e);
       System.exit(-1);
     }
   }
 
+  /* create graph that reads the whole file, doesn't care about ignores */
 	public void createGraph(String format, String fileName){
-  	createGraph(format, fileName, false);
+  	createGraph(format, fileName, false, true, null);
   }
 
+  /*create graph that read the whole file, but you can choose if you want to store the ignores*/
   public void createGraph(String format, String fileName, boolean addIgnores){
-    createGraph(format, fileName, false,0);
+    createGraph(format, fileName, addIgnores,true,null);
+  }
+
+  /*create graph that reads file from line "beginning" to line "end", lines start at 0, includes beginning but doesn't include 
+  the line "end" - its expected to read (end-beginning) lines. You can also decide if you want to store the ignores*/
+  public void createGraph(String format, String fileName, boolean addIgnores, int beginning, int end){
+    int[] interval = new int[2];
+    interval[0]=beginning;
+    interval[1]=end;
+    createGraph(format,fileName,addIgnores,false,interval);
   }
 
 
@@ -179,10 +226,10 @@ class GraphFileParser<V,E,G>{
     }
     
     if(addIgnores){ 
-      return new ParserInfo(vertex,addIgnores,ignoreList);
+      return new ParserInfo(vertex,addIgnores,ignoreList,format);
     }
     else{
-      return new ParserInfo(vertex);
+      return new ParserInfo(vertex,format);
     }
   }
 
@@ -203,15 +250,18 @@ class GraphFileParser<V,E,G>{
       public StringBuilder[] vertex;
       public boolean hasIgnores;
       public ArrayList<StringBuilder> ignoreList;
-      public ParserInfo(StringBuilder[] _vertex){
+      public String format;
+      public ParserInfo(StringBuilder[] _vertex, String _format){
         vertex = _vertex;
         hasIgnores = false;
         ignoreList = null;
+        format = _format;
       }
-      public ParserInfo(StringBuilder[] _vertex, boolean _hasIgnores, ArrayList<StringBuilder> _ignores){
+      public ParserInfo(StringBuilder[] _vertex, boolean _hasIgnores, ArrayList<StringBuilder> _ignores, String _format){
         vertex = _vertex;
         hasIgnores = _hasIgnores;
         ignoreList = _ignores;
+        _format = format;
       }
       //*change to have more than one vertex*/
       public String toString(){
