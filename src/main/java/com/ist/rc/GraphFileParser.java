@@ -65,6 +65,23 @@ class GraphFileParser<V,E,G>{
     graph = _graph;
   }
  
+  public GraphFileParser setVertexFactory(VertexFactory<V,G> _vFactory){
+    vFactory = _vFactory;
+    return this; 
+  }
+
+  public GraphFileParser setEdgeFactory(EdgeFactory<V,E,G> _eFactory){
+    eFactory = _eFactory;
+    return this;
+  }
+
+  public VertexFactory<V,G> getVertexFactory(){
+    return vFactory;
+  }
+
+  public EdgeFactory<V,E,G> getEdgeFactory(){
+    return eFactory;
+  }
   /**
     * Arguments:
     *   format: the general structure of an edge in a file
@@ -85,7 +102,8 @@ class GraphFileParser<V,E,G>{
     *
     * btw, you can't use this method directly, there's others that overload this
   */
-  private void createGraph(String format, String fileName, Boolean addIgnores, boolean readWholeFile,int[] interval){
+  private void createGraph(boolean isItEdge,String format, String fileName, Boolean addIgnores, boolean readWholeFile,int[] interval){
+
     String newRegex = Pattern.quote(format);
     int numOfNewLines = 0;
     int segmentsToRead = -1;
@@ -125,11 +143,13 @@ class GraphFileParser<V,E,G>{
       String group = scan.findWithinHorizon(newRegex,0);
       while(group != null && segmentsToRead != 0){
           System.out.println(" ." + segmentsToRead);
-          ParserInfo info = splitIntoVertex(format,group,addIgnores); 
-          
+          ParserInfo info = splitIntoVertex(format,group,addIgnores,1); 
+
           //Factories
           V[] ve = vFactory.addVertex(graph,info);
-          eFactory.addEdge(graph,info,ve);
+          if(isItEdge){
+            eFactory.addEdge(graph,info,ve);
+          }
 
           group = scan.findWithinHorizon(newRegex,0);
           segmentsToRead--;
@@ -144,22 +164,22 @@ class GraphFileParser<V,E,G>{
   }
 
   /* create graph that reads the whole file, doesn't care about ignores */
-	public void createGraph(String format, String fileName){
-  	createGraph(format, fileName, false, true, null);
+	public void createGraph(boolean isItEdge,String format, String fileName){
+  	createGraph(isItEdge,format, fileName, false, true, null);
   }
 
   /*create graph that read the whole file, but you can choose if you want to store the ignores*/
-  public void createGraph(String format, String fileName, boolean addIgnores){
-    createGraph(format, fileName, addIgnores,true,null);
+  public void createGraph(boolean isItEdge,String format, String fileName, boolean addIgnores){
+    createGraph(isItEdge,format, fileName, addIgnores,true,null);
   }
 
   /*create graph that reads file from line "beginning" to line "end", lines start at 0, includes beginning but doesn't include 
   the line "end" - its expected to read (end-beginning) lines. You can also decide if you want to store the ignores*/
-  public void createGraph(String format, String fileName, boolean addIgnores, int beginning, int end){
+  public void createGraph(boolean isItEdge,String format, String fileName, boolean addIgnores, int beginning, int end){
     int[] interval = new int[2];
     interval[0]=beginning;
     interval[1]=end;
-    createGraph(format,fileName,addIgnores,false,interval);
+    createGraph(isItEdge,format,fileName,addIgnores,false,interval);
   }
 
 
@@ -180,17 +200,18 @@ class GraphFileParser<V,E,G>{
     *   of the class ParseInfo.
     *
   **/
-  public ParserInfo splitIntoVertex(String format, String phrase,boolean addIgnores){
+  public ParserInfo splitIntoVertex(String format, String phrase,boolean addIgnores, int vertexesToRead){
     format = "|"+ format + "|";  //the algorithms knows when to stop by looking ahead and behind 
     phrase = "|"+ phrase + "|";  //this is to always have something to look ahead and behind
 
     int phraseIndex = 0;  
     int formatIndex = 0; 
     int vertexNumber = 0;
-    StringBuilder[] vertex = new StringBuilder[2];
+    StringBuilder[] vertex = new StringBuilder[vertexesToRead];
+    for(int i=0; i<vertexesToRead; i++){
+      vertex[i] = new StringBuilder();
+    }
     ArrayList<StringBuilder> ignoreList = new ArrayList<StringBuilder>();
-    vertex[0] = new StringBuilder();
-    vertex[1] = new StringBuilder();
     char toMatch;
 
     while( phraseIndex < phrase.length()){ 
