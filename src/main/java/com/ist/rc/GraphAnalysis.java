@@ -27,14 +27,11 @@ public class GraphAnalysis<V,E>{
 	private double averagePathLength = -1;
 	private Map<Integer, MutableInt> mapNumNodeWithDegree = null;
 	private List<Map<V, Number>> listOfShortesPathOfEachVertex = null;
+	private int higherDegree = 0;
+	private int lowestDegree = 0;
 
 	public GraphAnalysis(Graph<V,E> graph){
 		g = graph;
-		
-		
-		
-	
-		
 	}
 
 	public Graph<V,E> getG() {
@@ -89,6 +86,17 @@ public class GraphAnalysis<V,E>{
 		return listOfShortesPathOfEachVertex;
 	}
 
+	//getMapNumNode will call MappingNumNodeWithDegree if it was never called
+	//that method calculates higher and lowest degrees
+	public int getHighestDegree(){
+		getMapNumNodeWithDegree();
+		return higherDegree;
+	}
+
+	public int getLowestDegree(){
+		getMapNumNodeWithDegree();
+		return lowestDegree;
+	}
 
 	/**					 **\ 
 	*  INTERNAL OPERATIONS *
@@ -98,8 +106,17 @@ public class GraphAnalysis<V,E>{
 		for (Integer degree: getDegreeDistribution()) {
 			if(map.containsKey(degree)) 
 				map.get(degree).increment();
-			 else
+			 else{
 				 map.put(degree, new MutableInt());
+			 }
+			 int value = map.get(degree).get();
+			 if(value  > higherDegree){
+			 	higherDegree = value;
+			 }
+
+			 if(value < lowestDegree){
+			 	lowestDegree = value;
+			 }
 		}
 		return map;
 	}

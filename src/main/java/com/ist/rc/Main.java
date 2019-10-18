@@ -30,13 +30,16 @@ public class Main {
         (gvf,gef,g);
 
 
-        String format = "V V\n";
-        gfp.createGraph(format,"gset.txt",false);
-        //System.out.println(g.toString());
+        String format = "     V     V        1 \n";
+        gfp.createGraph(format,"yelo.txt",false);
+        System.out.println(g.toString());
         GraphAnalysis<Vertex,Edge> k = new GraphAnalysis(g);
 
-        BRBGraph vis = new BRBGraph(g,k);
+        BRBGraph vis = new BRBGraph<Vertex,Edge>(g,k);
+                System.out.println("ok");
+       // System.out.println(k.getMapNumNodeWithDegree().get(2).get());
         vis.setVisible(true);
+
 
       //  GraphAnalysis<Vertex,Edge> k = new GraphAnalysis(g);
       //  k.print();

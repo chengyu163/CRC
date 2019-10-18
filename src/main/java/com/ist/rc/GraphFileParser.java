@@ -123,7 +123,6 @@ class GraphFileParser<V,E,G>{
       }
       String group = scan.findWithinHorizon(newRegex,0);
       //this matches segment to segment until we've either read all in the file or read all interval allowed
-      System.out.println("CreateGraph "+ newRegex);
       while(group != null && segmentsToRead != 0){  
           ParserInfo info = splitIntoVertex(format,group,addIgnores,numOfVertexes); 
           V[] ve = vFactory.addVertex(graph,info); //factories!!
@@ -193,8 +192,8 @@ class GraphFileParser<V,E,G>{
     char toMatch;
 
     while( phraseIndex < phrase.length()){ 
-      //Escape character behind V and I are completely ignored
-      if(format.charAt(formatIndex)=='\\' && (format.charAt(formatIndex+1)!=V.charAt(0) || format.charAt(formatIndex+1)!=I.charAt(0))){
+      //Escape character behind V and I are completely ignore
+      if(format.charAt(formatIndex)=='\\' && (format.charAt(formatIndex+1)!=V.charAt(0)  || format.charAt(formatIndex+1)!=I.charAt(0))){
         formatIndex++;
       }
 
@@ -304,7 +303,7 @@ class GraphFileParser<V,E,G>{
 
   private String formatToRegex(String format){
     String newRegex = Pattern.quote(format);
-    newRegex = newRegex.replaceAll("(?<!\\\\)"+V,"\\\\E[0-9a-zA-Z ]*\\\\Q");
+    newRegex = newRegex.replaceAll("(?<!\\\\)"+V,"\\\\E[0-9a-zA-Z]*\\\\Q");
     newRegex = newRegex.replaceAll("(?<=\\\\)"+V,V);
     newRegex = newRegex.replaceAll("(?<!\\\\)"+I,"\\\\E.*\\\\Q");
     return newRegex;
