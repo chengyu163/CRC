@@ -43,12 +43,10 @@ public class Main {
          g);
 */
         String format = "V V\n";
-
-
-        gfp.createGraph(format,"keppo.txt",false);
-        System.out.println(g.getVertexCount());
-        System.out.println(g.getEdgeCount());
-        System.out.println("£££££££32££££££££\n"+g.toString());
+        gfp.createGraph(format,"input.txt",false);
+        
+        BRBGraph graph = new BRBGraph(g);
+        graph.setVisible(true);
     }
 }    
 

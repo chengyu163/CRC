@@ -35,6 +35,7 @@ import edu.uci.ics.jung.algorithms.generators.random.BarabasiAlbertGenerator;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 
@@ -45,23 +46,26 @@ public class BRBGraph extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public BRBGraph(String[] args) {
+	public BRBGraph(Graph graph ) {
 		
-		Graph<Integer, Integer> graph = createBRBGraph(args);
-
+		
 		    JPanel panel = new JPanel(new GridLayout(2,2));
+		    //panel to show the graph
 	        JPanel scrollPane1 = new JPanel();
 	        panel.add(scrollPane1,0,0);
 	        scrollPane1.add(showGraph(graph));
 	         
+	        //panel to show the statistics
 	        JPanel scrollPane2 = new JPanel();
 	        panel.add(scrollPane2,0,1);
 	        scrollPane2.add(showStatistics(graph));
 	         
+	        // panel to plot the degree distribution
 	        JPanel scrollPane3 = new JPanel();
 	        panel.add(scrollPane3);
 	        scrollPane3.add(plotGraphicDegreeDistribution(graph));
 	         
+	        //panel to plot the clustering coefficient
 	        JPanel scrollPane4 = new JPanel();
 	        panel.add(scrollPane4);
 	        scrollPane4.add(plotGraphicClusterCoefficient(graph));
@@ -70,6 +74,8 @@ public class BRBGraph extends JFrame {
 	        pack();
 		
 	}
+	
+
 
 	private Component plotGraphicClusterCoefficient(Graph<Integer, Integer> graph) {
 		XYDataset dataset = createDataset1(graph);
@@ -250,19 +256,12 @@ public class BRBGraph extends JFrame {
 		BarabasiAlbertGenerator<Integer, Integer> bag = new BarabasiAlbertGenerator<Integer, Integer>(graphFactory,
 				vertexFactory, edgeFactory, 5, 5, 0, seedVertices);
 		Graph<Integer, Integer> graph = bag.create();
-		if(args.length != 0)
-			bag.evolveGraph(Integer.parseInt(args[0]));
-		else
-			bag.evolveGraph(300);
+			bag.evolveGraph(500);
 		return graph;
 	}
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				new BRBGraph(args).setVisible(true);
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		BRBGraph vis = new BRBGraph();
+//		vis.setVisible(true);
+//	}
 }
