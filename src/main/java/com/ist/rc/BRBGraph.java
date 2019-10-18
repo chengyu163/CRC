@@ -220,14 +220,14 @@ public class BRBGraph extends JFrame {
 
 	private Component showStatistics(Graph<Integer, Integer> graph) {
 		GraphAnalysis<Integer, Integer> graphAnalysis = new GraphAnalysis<Integer, Integer>(graph);
-		String label = "<html>AverageDegree ="+graphAnalysis.averageDegree+
-				"<br/> AverageClusteringCoefficient ="+ graphAnalysis.averageClusteringCoefficient+"<br/>"
-						+ "AveragePathLength ="+graphAnalysis.averagePathLength+"</html>";
+		String label = "<html>AverageDegree ="+graphAnalysis.getAverageDegree()+
+				"<br/> AverageClusteringCoefficient ="+ graphAnalysis.getAverageClusteringCoefficient()+"<br/>"
+						+ "AveragePathLength ="+graphAnalysis.getAveragePathLength()+"</html>";
 		JLabel metrics = new JLabel(label);
 		return metrics;
 	}
 
-	private static Graph<Integer, Integer> createBRBGraph(String[] args) {
+/*	private static Graph<Integer, Integer> createBRBGraph(String[] args) {
 		Set<Integer> seedVertices = new HashSet<Integer>();
 		for (int i = 0; i < 10; i++) {
 			seedVertices.add(i);
@@ -263,5 +263,5 @@ public class BRBGraph extends JFrame {
 //	public static void main(String[] args) {
 //		BRBGraph vis = new BRBGraph();
 //		vis.setVisible(true);
-//	}
+//	} */
 }

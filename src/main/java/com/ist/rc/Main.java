@@ -18,35 +18,25 @@ import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 
 public class Main {
     public static void main( String[] args )
-    {
-
-    	System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n");
-     
-
-   
-
-
-
+    {     
+        //Create EdgeFactory
         EdgeFactory gef = new GeneralEdgeFactory<Vertex,UndirectedGraph<Vertex,Edge>>();
+        //Create VertexFactory
         VertexFactory gvf = new GeneralVertexFactory<UndirectedSparseGraph<Vertex,Edge>>();
+        //graph
         UndirectedSparseGraph g = new UndirectedSparseGraph<Vertex,Edge>();
+        //Parser!
         GraphFileParser<Vertex,Edge,UndirectedSparseGraph> gfp = new GraphFileParser<Vertex,Edge,UndirectedSparseGraph>
-        (gvf,
-        gef,
-         g);
+        (gvf,gef,g);
 
-/*
-        UndirectedSparseGraph g = new UndirectedSparseGraph<Vertex,Edge>();
-        GraphFileParser<Vertex,Edge,UndirectedSparseGraph> gfp = new GraphFileParser<Vertex,Edge,UndirectedSparseGraph>
-        (new GeneralVertexFactory<UndirectedSparseGraph<Vertex,Edge>>(),
-         new GeneralEdgeFactory<Vertex,UndirectedSparseGraph<Vertex,Edge>>(), 
-         g);
-*/
+
         String format = "V V\n";
-        gfp.createGraph(format,"input.txt",false);
-        
-        BRBGraph graph = new BRBGraph(g);
-        graph.setVisible(true);
+        gfp.createGraph(format,"gset.txt",false);
+        //System.out.println(g.toString());
+        //BRBGraph graph = new BRBGraph(g);
+        GraphAnalysis<Vertex,Edge> k = new GraphAnalysis(g);
+        k.print();
+    
     }
 }    
 

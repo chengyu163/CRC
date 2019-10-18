@@ -19,81 +19,83 @@ import edu.uci.ics.jung.graph.Graph;
 */
 public class GraphAnalysis<V,E>{
 
-	Graph<Integer, Integer> g;
-	List<Integer> degreeDistribution = null;
-	double apl = -1;
-	Map<Integer,Double> clusteringCoefficients = null;
-	double averageClusteringCoefficient = 0;
-	double averageDegree = -1;
-	double averagePathLength = 0;
-	Map<Integer, MutableInt> mapNumNodeWithDegree = null;
-	List<Map<Integer, Number>> listOfShortesPathOfEachVertex = null;
-	public GraphAnalysis(Graph<Integer, Integer> graph){
+	private Graph<V,E> g;
+	private List<Integer> degreeDistribution = null;
+	private Map<V,Double> clusteringCoefficients = null;
+	private double averageClusteringCoefficient = -1;
+	private double averageDegree = -1;
+	private double averagePathLength = -1;
+	private Map<Integer, MutableInt> mapNumNodeWithDegree = null;
+	private List<Map<V, Number>> listOfShortesPathOfEachVertex = null;
+
+	public GraphAnalysis(Graph<V,E> graph){
 		g = graph;
-		degreeDistribution = degreeDistribution();
-		clusteringCoefficients = clusteringCoefficient();
-		averageClusteringCoefficient = averageClusteringCoefficient();
-		averageDegree = averageDegree();
-		mapNumNodeWithDegree = MappingNumNodeWithDegree();
-		listOfShortesPathOfEachVertex = listOfShortesPathOfEachVertex();
-		averagePathLength = averagePathLength();
+		
+		
+		
+	
+		
 	}
 
-	public Graph<Integer, Integer> getG() {
+	public Graph<V,E> getG() {
 		return g;
 	}
 
-	public void setG(Graph<Integer, Integer> g) {
-		this.g = g;
-	}
-
 	public List<Integer> getDegreeDistribution() {
+		if(degreeDistribution == null){
+			degreeDistribution = degreeDistribution();
+		}
 		return degreeDistribution;
 	}
 
-	public void setDegreeDistribution(List<Integer> degreeDistribution) {
-		this.degreeDistribution = degreeDistribution;
-	}
-
-	public double getApl() {
-		return apl;
-	}
-
-	public void setApl(double apl) {
-		this.apl = apl;
-	}
-
-	public Map<Integer, Double> getClusteringCoefficients() {
+	public Map<V, Double> getClusteringCoefficients() {
+		if(clusteringCoefficients == null){
+			clusteringCoefficients = clusteringCoefficient();
+		}
 		return clusteringCoefficients;
 	}
 
-	public void setClusteringCoefficients(Map<Integer, Double> clusteringCoefficients) {
-		this.clusteringCoefficients = clusteringCoefficients;
-	}
-
 	public double getAverageClusteringCoefficient() {
+		if(averageClusteringCoefficient == -1){
+			averageClusteringCoefficient = averageClusteringCoefficient();
+		}
 		return averageClusteringCoefficient;
 	}
 
-	public void setAverageClusteringCoefficient(double averageClusteringCoefficient) {
-		this.averageClusteringCoefficient = averageClusteringCoefficient;
+	public double getAverageDegree(){
+    	if(averageDegree == -1)
+    		averageDegree = 2*g.getEdgeCount()/g.getVertexCount();
+    	return averageDegree;
+    }
+
+    public double getAveragePathLength(){
+		if(averagePathLength == -1){
+			averagePathLength = averagePathLength();
+		}
+		return averagePathLength;
 	}
 
-	public Map<Integer, MutableInt> getMapNumNodeWithDegree() {
+    public Map<Integer, MutableInt> getMapNumNodeWithDegree() {
+		if(mapNumNodeWithDegree == null){
+			mapNumNodeWithDegree = MappingNumNodeWithDegree();
+		}
 		return mapNumNodeWithDegree;
 	}
 
-	public void setMapNumNodeWithDegree(Map<Integer, MutableInt> mapNumNodeWithDegree) {
-		this.mapNumNodeWithDegree = mapNumNodeWithDegree;
+	public List<Map<V, Number>> getListOfShortesPathOfEachVertex(){
+		if(listOfShortesPathOfEachVertex == null){
+			listOfShortesPathOfEachVertex = listOfShortesPathOfEachVertex();
+		}
+		return listOfShortesPathOfEachVertex;
 	}
 
-	public void setAverageDegree(double averageDegree) {
-		this.averageDegree = averageDegree;
-	}
 
+	/**					 **\ 
+	*  INTERNAL OPERATIONS *
+	\**                  **/
 	private Map<Integer, MutableInt> MappingNumNodeWithDegree() {
     	Map<Integer, MutableInt> map = new HashMap<Integer, MutableInt>();
-		for (Integer degree: degreeDistribution) {
+		for (Integer degree: getDegreeDistribution()) {
 			if(map.containsKey(degree)) 
 				map.get(degree).increment();
 			 else
@@ -106,46 +108,50 @@ public class GraphAnalysis<V,E>{
 		return degreeDistribution.stream().mapToInt(Integer::intValue).average().getAsDouble();
 	}
 
-	public double getAverageDegree(){
-    	if(averageDegree == -1)
-    		averageDegree = 2*g.getEdgeCount()/g.getVertexCount();
-    	return averageDegree;
-    }
-
     /*Degree Distribution absolute format*/
     public List<Integer> degreeDistribution(){
     	return g.getVertices().stream().map(v -> g.getNeighborCount(v)).collect(Collectors.toList());
     }
 
-    public List<Map<Integer, Number>> listOfShortesPathOfEachVertex(){
-    	UnweightedShortestPath<Integer, Integer> f = new UnweightedShortestPath<Integer, Integer>(g);
-    	List<Map<Integer, Number>> listOfShortesPathOfEachVertex = new ArrayList<>();
-    	for (Integer vertex: g.getVertices()) {
-			listOfShortesPathOfEachVertex.add(f.getDistanceMap(vertex.intValue()));
+    private List<Map<V, Number>> listOfShortesPathOfEachVertex(){
+    	UnweightedShortestPath<V, E> f = new UnweightedShortestPath<V, E>(g);
+    	List<Map<V,Number>> listOfShortesPathOfEachVertex = new ArrayList<>();
+    	for (V vertex: g.getVertices()) {
+			listOfShortesPathOfEachVertex.add(f.getDistanceMap(vertex));
 		}
     	return listOfShortesPathOfEachVertex;
     }
     
     private double averagePathLength() {
     	double  totalLength =0;
-    	for (Map<Integer, Number> shortestPathLength : listOfShortesPathOfEachVertex) {
+    	for (Map<V, Number> shortestPathLength : getListOfShortesPathOfEachVertex()) {
 			totalLength += shortestPathLength.values().stream().mapToDouble(value-> value.doubleValue()).sum();
 		}
     	return totalLength/(g.getVertexCount()*(g.getVertexCount()-1));
   	}
 
 
-    public Map<Integer, Double> clusteringCoefficient(){
+    private Map<V, Double> clusteringCoefficient(){
     	return Metrics.clusteringCoefficients(g);
     }
     
-    public double averageClusteringCoefficient() {
+    private double averageClusteringCoefficient() {
     	double count = 0;
-    	for (Entry<Integer, Double> entry: clusteringCoefficients.entrySet()) {
+    	for (Entry<V, Double> entry: getClusteringCoefficients().entrySet()) {
 			count+=entry.getValue();
 		}
-		return count/clusteringCoefficients.size(); 
+		return count/getClusteringCoefficients().size(); 
     }
     
+    public void print(){
+    	//System.out.println("Degree Distribution:" + getDegreeDistribution());
+    //	System.out.println("clusteringCoefficients" + getClusteringCoefficients());
+    	//System.out.println("averageClusteringCoefficient" + getAverageClusteringCoefficient());
+    //	System.out.println("averageDegree" + getAverageDegree());
+    	//System.out.println("averagePathLength" + getAveragePathLength());
+    	//System.out.println("mapNumNodeWithDegree" + getMapNumNodeWithDegree());
+    //	System.out.println("listOfShortesPathOfEachVertex" + getListOfShortesPathOfEachVertex());
+    }
 
 }
+
