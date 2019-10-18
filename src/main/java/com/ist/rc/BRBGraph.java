@@ -44,11 +44,11 @@ public class BRBGraph extends JFrame {
 	/**
 	 * 
 	 */
+	GraphAnalysis graphAnalysis = null;
 	private static final long serialVersionUID = 1L;
 
-	public BRBGraph(Graph graph ) {
-		
-		
+	public BRBGraph(Graph graph,GraphAnalysis _graphAnalysis) {
+			graphAnalysis = _graphAnalysis;		
 		    JPanel panel = new JPanel(new GridLayout(2,2));
 		    //panel to show the graph
 	        JPanel scrollPane1 = new JPanel();
@@ -66,17 +66,17 @@ public class BRBGraph extends JFrame {
 	        scrollPane3.add(plotGraphicDegreeDistribution(graph));
 	         
 	        //panel to plot the clustering coefficient
-	        JPanel scrollPane4 = new JPanel();
+	       /* JPanel scrollPane4 = new JPanel();
 	        panel.add(scrollPane4);
 	        scrollPane4.add(plotGraphicClusterCoefficient(graph));
-
+			*/
 	        add(panel);
 	        pack();
 		
 	}
 	
 
-
+/*
 	private Component plotGraphicClusterCoefficient(Graph<Integer, Integer> graph) {
 		XYDataset dataset = createDataset1(graph);
         JFreeChart chart = createChart1(dataset);
@@ -85,7 +85,7 @@ public class BRBGraph extends JFrame {
         chartPanel.setBackground(Color.white);
         return chartPanel;
 	}
-
+*/
 	private JFreeChart createChart1(XYDataset dataset) {
 
         JFreeChart chart = ChartFactory.createXYLineChart(
@@ -125,8 +125,10 @@ public class BRBGraph extends JFrame {
 
         return chart;
 	}
-
-	private XYDataset createDataset1(Graph<Integer, Integer> graph) {
+	/*
+	* 	This is a problem because vertexes do not have numbers necessarily
+	*
+	/*private XYDataset createDataset1(Graph<Integer, Integer> graph) {
 
         XYSeries series = new XYSeries(""); 
 		GraphAnalysis<Integer, Integer> graphAnalysis = new GraphAnalysis<Integer, Integer>(graph);
@@ -139,7 +141,7 @@ public class BRBGraph extends JFrame {
 
         return dataset;
 	}
-
+	*/
 	private Component plotGraphicDegreeDistribution(Graph<Integer, Integer> graph) {
 		XYDataset dataset = createDataset(graph);
         JFreeChart chart = createChart(dataset);

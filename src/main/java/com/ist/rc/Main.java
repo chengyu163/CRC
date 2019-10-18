@@ -33,9 +33,13 @@ public class Main {
         String format = "V V\n";
         gfp.createGraph(format,"gset.txt",false);
         //System.out.println(g.toString());
-        //BRBGraph graph = new BRBGraph(g);
         GraphAnalysis<Vertex,Edge> k = new GraphAnalysis(g);
-        k.print();
+
+        BRBGraph vis = new BRBGraph(g,k);
+        vis.setVisible(true);
+
+      //  GraphAnalysis<Vertex,Edge> k = new GraphAnalysis(g);
+      //  k.print();
     
     }
 }    
