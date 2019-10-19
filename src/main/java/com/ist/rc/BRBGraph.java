@@ -70,27 +70,11 @@ public class BRBGraph<V,E> extends JFrame {
 	        panel.add(scrollPane3);
 	        scrollPane3.add(plotGraphicDegreeDistribution());
 	         
-	        //panel to plot the clustering coefficient
-	       /* JPanel scrollPane4 = new JPanel();
-	        panel.add(scrollPane4);
-	        scrollPane4.add(plotGraphicClusterCoefficient(graph));
-			*/
 	        add(panel);
 	        pack();
 		
 	}
 	
-
-/*
-	private Component plotGraphicClusterCoefficient(Graph<Integer, Integer> graph) {
-		XYDataset dataset = createDataset1(graph);
-        JFreeChart chart = createChart1(dataset);
-        ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-        chartPanel.setBackground(Color.white);
-        return chartPanel;
-	}
-*/
 	private JFreeChart createChart1(XYDataset dataset) {
 
         JFreeChart chart = ChartFactory.createXYLineChart(
@@ -130,23 +114,7 @@ public class BRBGraph<V,E> extends JFrame {
 
         return chart;
 	}
-	/*
-	* 	This is a problem because vertexes do not have numbers necessarily
-	*
-	/*private XYDataset createDataset1(Graph<Integer, Integer> graph) {
 
-        XYSeries series = new XYSeries(""); 
-		GraphAnalysis<Integer, Integer> graphAnalysis = new GraphAnalysis<Integer, Integer>(graph);
-		Map<Integer, Double> clustercoefficient = graphAnalysis.getClusteringCoefficients();
-		for (Entry<Integer, Double> coefficient : clustercoefficient.entrySet()) {
-			series.add(coefficient.getKey().intValue(), coefficient.getValue().doubleValue());
-		}
-        XYSeriesCollection dataset = new XYSeriesCollection();
-        dataset.addSeries(series);
-
-        return dataset;
-	}
-	*/
 	private Component plotGraphicDegreeDistribution() {
 		XYDataset dataset = createDataset();
         JFreeChart chart = createChart(dataset);
@@ -223,13 +191,10 @@ public class BRBGraph<V,E> extends JFrame {
 		vv.setGraphMouse(graphMouse);
 		Transformer<V,Paint> transformer = new Transformer<V, Paint>() {
       @Override public Paint transform(V arg0) { 
-      		//float y = (graph.getNeighborCount(arg0)- graphAnalysis.getLowestDegree())/(graphAnalysis.getHighestDegree() - graphAnalysis.getLowestDegree());
-      		int y = 25;
       		Vertex i = (Vertex) arg0;
       		double r = (graph.getNeighborCount(arg0)- graphAnalysis.getLowestDegree());
       		r = r/(graphAnalysis.getHighestDegree() - graphAnalysis.getLowestDegree());
       		float j = 1 - (float) r;
-
       		return hslColor((float)0.66,(float)1,j);
        }
     };
@@ -241,7 +206,9 @@ public class BRBGraph<V,E> extends JFrame {
 	private Component showStatistics() {
 		String label = "<html>AverageDegree ="+graphAnalysis.getAverageDegree()+
 				"<br/> AverageClusteringCoefficient ="+ graphAnalysis.getAverageClusteringCoefficient()+"<br/>"
-						+ "AveragePathLength ="+graphAnalysis.getAveragePathLength()+"</html>";
+						+ "AveragePathLength ="+graphAnalysis.getAveragePathLength()+ "<br/>"
+						+ "HighestDegree =" + graphAnalysis.getHighestDegree()+"<br/>"
+						+ "LowestDegree =" + graphAnalysis.getLowestDegree()+"</html>";
 		JLabel metrics = new JLabel(label);
 		return metrics;
 	}
@@ -252,10 +219,11 @@ public class BRBGraph<V,E> extends JFrame {
 	* https://stackoverflow.com/questions/2997656/how-can-i-use-the-hsl-colorspace-in-java
 	* Author: https://stackoverflow.com/users/519654/xtempore
 	* Attribution format required by StackOverflow: https://stackoverflow.blog/2009/06/25/attribution-required/
+	* 
+	* They are just colouring functions for the vertexes
 	*/
-    public Color hslColor(float h, float s, float l) {
+    private Color hslColor(float h, float s, float l) {
 	    float q, p, r, g, b;
-
 	    if (s == 0) {
 	        r = g = b = l; // achromatic
 	    } else {

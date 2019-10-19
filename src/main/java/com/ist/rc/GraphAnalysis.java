@@ -91,6 +91,9 @@ public class GraphAnalysis<V,E>{
 	public int getHighestDegree(){
 		getMapNumNodeWithDegree();
 		return higherDegree;
+		
+
+		
 	}
 
 	public int getLowestDegree(){
@@ -98,10 +101,11 @@ public class GraphAnalysis<V,E>{
 		return lowestDegree;
 	}
 
-	/**					 **\ 
+	/**			**\ 
 	*  INTERNAL OPERATIONS *
 	\**                  **/
 	private Map<Integer, MutableInt> MappingNumNodeWithDegree() {
+	lowestDegree = g.getVertexCount();
     	Map<Integer, MutableInt> map = new HashMap<Integer, MutableInt>();
 		for (Integer degree: getDegreeDistribution()) {
 			if(map.containsKey(degree)) 
@@ -109,14 +113,15 @@ public class GraphAnalysis<V,E>{
 			 else{
 				 map.put(degree, new MutableInt());
 			 }
-			 int value = map.get(degree).get();
-			 if(value  > higherDegree){
-			 	higherDegree = value;
+			
+			if(degree  > higherDegree){
+			 	higherDegree = degree;
 			 }
+			
+			if(degree < lowestDegree){
+			 	lowestDegree = degree;
+			}
 
-			 if(value < lowestDegree){
-			 	lowestDegree = value;
-			 }
 		}
 		return map;
 	}
@@ -159,16 +164,7 @@ public class GraphAnalysis<V,E>{
 		}
 		return count/getClusteringCoefficients().size(); 
     }
-    
-    public void print(){
-    	//System.out.println("Degree Distribution:" + getDegreeDistribution());
-    //	System.out.println("clusteringCoefficients" + getClusteringCoefficients());
-    	//System.out.println("averageClusteringCoefficient" + getAverageClusteringCoefficient());
-    //	System.out.println("averageDegree" + getAverageDegree());
-    	//System.out.println("averagePathLength" + getAveragePathLength());
-    	//System.out.println("mapNumNodeWithDegree" + getMapNumNodeWithDegree());
-    //	System.out.println("listOfShortesPathOfEachVertex" + getListOfShortesPathOfEachVertex());
-    }
+
 
 }
 
